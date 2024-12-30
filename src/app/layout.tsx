@@ -1,9 +1,34 @@
 import { Outlet, NavLink } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
 
-function Layout() {
+const Layout: React.FC = () => {
+  const [isScrollingUp, setIsScrollingUp] = useState<boolean>(true);
+
+  const lastScrollY = useRef<number>(0);
+
+  const handleScroll = () => {
+    const currentScrollPos = window.scrollY;
+
+    setIsScrollingUp(currentScrollPos < lastScrollY.current);
+    
+    lastScrollY.current = currentScrollPos;
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-amber-50 text-stone-800 inter">
-      <header className="bg-gradient-to-r from-amber-100 to-amber-200 py-8 shadow-md">
+      <header
+        className={`bg-gradient-to-r from-amber-100 to-amber-200 shadow-md sticky top-0 z-50 transition-all duration-300 py-8 ${
+          !isScrollingUp ? "opacity-75" : "opacity-100"
+        }`}
+      >
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-semibold text-stone-800 mb-2 font-serif">
             Rosario M. Ponseca
@@ -74,6 +99,6 @@ function Layout() {
       </footer>
     </div>
   );
-}
+};
 
 export default Layout;
