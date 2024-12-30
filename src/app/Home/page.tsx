@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import profile from "../../assets/images/2.jpg";
+import profile from "../../assets/images/profile.jpg";
 
 export function Home() {
   return (
